@@ -15,6 +15,8 @@ window.__ModuleLoader__.load({
             --d5v-surface-0: #313244;
             --d5v-surface-1: #45475a;
             --d5v-surface-2: #585b70;
+            --d5v-overlay-0: #6c7086;
+            --d5v-overlay-1: #7f849c;
             --d5v-overlay: #9399b2;
             --d5v-subtext: #a6adc8;
             --d5v-text: #cdd6f4;
@@ -42,6 +44,8 @@ window.__ModuleLoader__.load({
             --dsw-alias-label-primary-foreground: var(--d5v-crust);
             --dsw-alias-label-secondary: var(--d5v-subtext);
             --dsw-alias-label-tertiary: var(--d5v-overlay);
+            --dsw-alias-label-deep-diving: var(--d5v-lavender);
+            --dsw-alias-label-deep-diving-shimmer: var(--d5v-mauve);
             --dsw-alias-label-caption: var(--d5v-overlay);
             --dsw-alias-label-on-color: var(--d5v-crust);
             --dsw-alias-brand-primary: var(--d5v-text);
@@ -69,6 +73,10 @@ window.__ModuleLoader__.load({
             --dsw-alias-markdown-inline-code: var(--d5v-surface-0);
             --dsw-alias-menu-group-header-fill: #313244f5;
             --dsw-menu-surface-fill: #313244f2;
+            --dsw-alias-scrollbar-bg-l1: var(--d5v-surface-2);
+            --dsw-alias-scrollbar-bg-l2: var(--d5v-overlay-0);
+            --dsw-alias-scrollbar-hover-l1: var(--d5v-overlay-0);
+            --dsw-alias-scrollbar-hover-l2: var(--d5v-overlay-1);
 
             --dsw-specific-input-major: var(--d5v-input);
             --dsw-specific-bubble: var(--d5v-input);
@@ -113,6 +121,57 @@ window.__ModuleLoader__.load({
             --dsw-elevation-stroke-color: #cdd6f433;
           }
 
+          html body[data-ds-dark-theme] [data-testid="todo-panel"] {
+            --dsw-elevation-stroke-color: var(--dsw-alias-border-l2);
+            background: var(--d5v-surface-0);
+            backdrop-filter: none;
+          }
+
+          html body[data-ds-dark-theme] [data-testid="todo-panel"] button[aria-expanded] {
+            border-radius: 5px;
+            outline: none;
+          }
+
+          html:not([data-input-modality="pointer"]) body[data-ds-dark-theme]
+            [data-testid="todo-panel"] button[aria-expanded]:focus-visible {
+            outline: 2px solid var(--d5v-lavender);
+            outline-offset: 2px;
+          }
+
+          body[data-ds-dark-theme] [data-testid="todo-panel"] [data-state="ongoing"] {
+            color: var(--d5v-lavender);
+          }
+
+          body[data-ds-dark-theme] [data-testid="todo-panel"] [data-state="idle"] {
+            color: var(--d5v-overlay-1);
+          }
+
+          body[data-ds-dark-theme] [data-composer-card] button[aria-label]:has(> svg > rect[rx="3"]) {
+            color: var(--dsw-alias-label-on-color);
+          }
+
+          body[data-ds-dark-theme] [data-conversation-region="composer"]
+            button[aria-haspopup="dialog"] > svg > circle[stroke-dasharray] {
+            stroke: var(--d5v-lavender);
+          }
+
+          html body[data-ds-dark-theme] [data-changed-files] {
+            --changes-fill: var(--d5v-surface-0);
+            --changes-hover: var(--d5v-surface-1);
+          }
+
+          html body[data-ds-dark-theme] [data-after-changes] {
+            --deliverable-fill: var(--d5v-surface-0);
+            --deliverable-hover: var(--d5v-surface-1);
+          }
+
+          html body[data-ds-dark-theme] :is(
+            [data-changed-files] [class$="_tile"],
+            [data-presented-file] [class$="_fileIcon"]
+          ) {
+            background: color-mix(in srgb, var(--d5v-lavender) 12%, var(--d5v-surface-0));
+          }
+
           /* Local overrides for plugins that paint their own controls. */
           body[data-ds-dark-theme] .dmc-composer-popover {
             background: var(--d5v-surface-0);
@@ -121,6 +180,10 @@ window.__ModuleLoader__.load({
           body[data-ds-dark-theme] :is(.dmc-composer-search, .dmc-set-input)::placeholder {
             color: var(--d5v-subtext);
             opacity: 1;
+          }
+
+          body[data-ds-dark-theme] .dsh-history-tools-actions {
+            background: var(--d5v-surface-0);
           }
 
           body[data-ds-dark-theme] .dsh-history-tools-dialog footer button[data-primary] {
