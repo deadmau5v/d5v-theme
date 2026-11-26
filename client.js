@@ -92,6 +92,7 @@ window.__ModuleLoader__.load({
             --dsw-alias-markdown-code-block: var(--d5v-mantle);
             --dsw-alias-markdown-code-block-banner: var(--d5v-input);
             --dsw-alias-markdown-inline-code: var(--d5v-surface-0);
+            --dsw-alias-markdown-tag: var(--d5v-surface-0);
             --dsw-alias-menu-group-header-fill: #313244f5;
             --dsw-menu-surface-fill: #313244f2;
             --dsw-alias-scrollbar-bg-l1: var(--d5v-surface-2);

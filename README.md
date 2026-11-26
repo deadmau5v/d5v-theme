@@ -9,7 +9,7 @@
 已验证 DeepSeek Harness **0.2.1-rc.4** 的 macOS Desktop 和 Web。Desktop 需要先启动过一次。安装前完全退出对应的 Desktop 或 Web 实例。
 
 ```sh
-dsh plugin --profile desktop add https://github.com/deadmau5v/d5v-theme/releases/download/v0.1.4/d5v-theme-0.1.4.tgz
+dsh plugin --profile desktop add https://github.com/deadmau5v/d5v-theme/releases/download/v0.1.5/d5v-theme-0.1.5.tgz
 ```
 
 Web 用户将 `desktop` 换成 `web`。在对应 profile 的 `cordis.patch.yml` 末尾追加以下配置。如果已有同名条目，保留一份即可。默认路径是 `~/.dsh/profiles/<profile>/cordis.patch.yml`，设置过 `DSH_HOME` 时以该目录为准。
