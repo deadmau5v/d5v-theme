@@ -160,7 +160,7 @@ window.__ModuleLoader__.load({
             --changes-hover: var(--d5v-surface-1);
           }
 
-          html body[data-ds-dark-theme] [data-after-changes] {
+          html body[data-ds-dark-theme] [data-presented-file] {
             --deliverable-fill: var(--d5v-surface-0);
             --deliverable-hover: var(--d5v-surface-1);
           }
