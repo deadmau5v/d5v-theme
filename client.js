@@ -24,6 +24,66 @@ window.__ModuleLoader__.load({
       }, "d5v theme: compact session header");
 
       ctx.effect(() => {
+        if (!globalThis.Highlight || !CSS.highlights || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        const seen = new WeakMap();
+        const active = new Set();
+        const names = Array.from({ length: 8 }, (_, index) => `d5v-stream-${index}`);
+        const groups = names.map(() => new Highlight());
+        const sheet = document.createElement("style");
+        sheet.textContent = names.map((name, index) =>
+          `::highlight(${name}) { color: rgba(205, 214, 244, ${(index + 1) / 8}); }`
+        ).join("\n");
+        document.head.append(sheet);
+        names.forEach((name, index) => CSS.highlights.set(name, groups[index]));
+        let frame;
+        const animate = () => {
+          const now = performance.now();
+          groups.forEach(group => group.clear());
+          for (const entry of active) {
+            if (!entry.node.isConnected || now - entry.start >= 300) {
+              active.delete(entry);
+              continue;
+            }
+            const end = Math.min(entry.end, entry.node.length);
+            if (entry.from >= end) continue;
+            const range = document.createRange();
+            range.setStart(entry.node, entry.from);
+            range.setEnd(entry.node, end);
+            groups[Math.min(7, Math.floor((now - entry.start) / 37.5))].add(range);
+          }
+          frame = active.size ? requestAnimationFrame(animate) : undefined;
+        };
+        const scan = node => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            const parent = node.parentElement;
+            if (!parent?.closest('[data-streaming="true"]') || parent.closest("pre, code, button, a")) return;
+            const value = node.data;
+            const previous = seen.get(node);
+            seen.set(node, value);
+            if (previous === undefined || !value.startsWith(previous) || value.length === previous.length) return;
+            active.add({ node, from: previous.length, end: value.length, start: performance.now() });
+            if (frame === undefined) frame = requestAnimationFrame(animate);
+            return;
+          }
+          if (node.nodeType === Node.ELEMENT_NODE) node.childNodes.forEach(scan);
+        };
+        const observer = new MutationObserver(records => {
+          for (const record of records) {
+            if (record.type === "characterData") scan(record.target);
+            else record.addedNodes.forEach(scan);
+          }
+        });
+        observer.observe(document.body, { subtree: true, childList: true, characterData: true });
+        scan(document.body);
+        return () => {
+          observer.disconnect();
+          if (frame !== undefined) cancelAnimationFrame(frame);
+          names.forEach(name => CSS.highlights.delete(name));
+          sheet.remove();
+        };
+      }, "d5v theme: streaming text fade");
+
+      ctx.effect(() => {
         const style = document.createElement("style");
         style.dataset.d5vTheme = "";
         style.textContent = `
@@ -146,6 +206,26 @@ window.__ModuleLoader__.load({
 
           html body[data-ds-dark-theme] [data-composer-card] {
             --dsw-elevation-stroke-color: #cdd6f433;
+          }
+
+          [data-variant="think"] [class$="_thinkBody"] {
+            overflow-wrap: anywhere;
+            word-break: normal;
+          }
+
+          [data-variant="think"] [class$="_thinkBody"] :not(pre) > code {
+            overflow-wrap: anywhere;
+            white-space: pre-wrap;
+          }
+
+          [data-variant="think"] [class$="_thinkBody"] pre {
+            max-width: 100%;
+            overflow-x: auto;
+          }
+
+          html body[data-ds-dark-theme] [data-queue-dock] > div {
+            --dsw-specific-menu: var(--d5v-surface-0);
+            --dsw-menu-backdrop-filter: none;
           }
 
           html body[data-ds-dark-theme] [data-testid="todo-panel"] {
