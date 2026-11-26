@@ -307,6 +307,12 @@ window.__ModuleLoader__.load({
             border-radius: var(--d5v-content-radius) 0 0 var(--d5v-content-radius);
             border-left: 1px solid var(--d5v-frame-seam, var(--dsw-alias-border-l3));
           }
+
+          /* Browser windows have no native frame; keep the rounded edge clean. */
+          html:not([data-platform]) body div:has(> [data-rightbar-col] + [data-shell-bottom]):not([data-sidebar-collapsed], [data-rightbar-fullscreen])
+            > div:has(+ [data-rightbar-col]) {
+            border-left: 0;
+          }
         `;
         document.head.append(style);
         const updatePresetLabel = () => {

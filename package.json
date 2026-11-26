@@ -1,6 +1,6 @@
 {
   "name": "d5v-theme",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Catppuccin Mocha-inspired theme with a rounded content pane for DeepSeek Harness",
   "type": "module",
   "license": "MIT",

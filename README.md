@@ -1,6 +1,6 @@
 # d5v theme
 
-给 DeepSeek Harness Desktop 和 Web 的 Catppuccin Mocha 风格主题。主内容区靠左侧栏的一边有 20 px 圆角和细描边。暗色模式从深到浅依次是侧栏、内容区、输入框，链接和主要操作用薰衣草紫。浅色模式沿用 DSH 配色，也有内容区圆角。
+给 DeepSeek Harness Desktop 和 Web 的 Catppuccin Mocha 风格主题。主内容区靠左侧栏的一边有 20 px 圆角，桌面端保留细描边。暗色模式从深到浅依次是侧栏、内容区、输入框，链接和主要操作用薰衣草紫。浅色模式沿用 DSH 配色，也有内容区圆角。
 
 ![d5v theme 在 macOS DeepSeek Harness 中的效果](preview.png)
 
@@ -9,7 +9,7 @@
 已验证 DeepSeek Harness **0.2.1-rc.4** 的 macOS Desktop 和 Web。Desktop 需要先启动过一次。安装前完全退出对应的 Desktop 或 Web 实例。
 
 ```sh
-dsh plugin --profile desktop add https://github.com/deadmau5v/d5v-theme/releases/download/v0.1.6/d5v-theme-0.1.6.tgz
+dsh plugin --profile desktop add https://github.com/deadmau5v/d5v-theme/releases/download/v0.1.7/d5v-theme-0.1.7.tgz
 ```
 
 Web 用户将 `desktop` 换成 `web`。在对应 profile 的 `cordis.patch.yml` 末尾追加以下配置。如果已有同名条目，保留一份即可。默认路径是 `~/.dsh/profiles/<profile>/cordis.patch.yml`，设置过 `DSH_HOME` 时以该目录为准。
