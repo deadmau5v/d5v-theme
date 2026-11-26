@@ -1,7 +1,28 @@
 window.__ModuleLoader__.load({
   id: "d5v-theme",
   factory: () => ({
+    inject: ["sessions"],
     apply(ctx) {
+      ctx.effect(() => {
+        const updateHeader = () => {
+          const snapshot = ctx.sessions.list.getSnapshot();
+          const current = Object.values(snapshot.byId).find(session => (session.retainedBy?.mainView ?? 0) > 0);
+          const sessionId = current?.id;
+          const parentId = sessionId && ctx.sessions.binding(sessionId)?.session.getSnapshot().subagent?.address?.parentSessionId;
+          const team = snapshot.projectionsBySession[parentId ?? sessionId]?.values?.agentTeam;
+          const preset = current?.projectionValues?.agentPreset;
+          document.body.toggleAttribute("data-d5v-single-lead", Array.isArray(team?.members) && team.members.length === 1 && team.members[0]?.name === "lead");
+          document.body.toggleAttribute("data-d5v-standard-preset", preset === "standard");
+        };
+        const unsubscribe = ctx.sessions.list.subscribe(updateHeader);
+        updateHeader();
+        return () => {
+          unsubscribe();
+          document.body.removeAttribute("data-d5v-single-lead");
+          document.body.removeAttribute("data-d5v-standard-preset");
+        };
+      }, "d5v theme: compact session header");
+
       ctx.effect(() => {
         const style = document.createElement("style");
         style.dataset.d5vTheme = "";
@@ -87,6 +108,11 @@ window.__ModuleLoader__.load({
             --dsw-specific-sidebar-nav-item-active-accent: var(--d5v-surface-0);
             --dsw-specific-selector: var(--d5v-surface-0);
             --dsw-specific-tip: var(--d5v-surface-0);
+          }
+
+          body [data-d5v-hide-preset],
+          body[data-d5v-single-lead] [data-team-action] {
+            display: none;
           }
 
           /* Locate the frame and center by the right pane's DSH slot marker. */
@@ -202,7 +228,24 @@ window.__ModuleLoader__.load({
           }
         `;
         document.head.append(style);
-        return () => style.remove();
+        const updatePresetLabel = () => {
+          const source = document.querySelector('style[data-plugin-css$="/AgentPresetLabel.module.css"]');
+          const labelClass = source?.textContent.match(/\.([\w-]+_label)\{/ )?.[1];
+          if (!labelClass) return;
+          for (const label of document.getElementsByClassName(labelClass)) {
+            label.toggleAttribute("data-d5v-hide-preset", document.body.hasAttribute("data-d5v-standard-preset"));
+          }
+        };
+        const observer = new MutationObserver(updatePresetLabel);
+        observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["data-d5v-standard-preset"] });
+        updatePresetLabel();
+        return () => {
+          observer.disconnect();
+          const source = document.querySelector('style[data-plugin-css$="/AgentPresetLabel.module.css"]');
+          const labelClass = source?.textContent.match(/\.([\w-]+_label)\{/ )?.[1];
+          if (labelClass) for (const label of document.getElementsByClassName(labelClass)) label.removeAttribute("data-d5v-hide-preset");
+          style.remove();
+        };
       }, "d5v theme: stylesheet");
     }
   })
