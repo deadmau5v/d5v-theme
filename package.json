@@ -1,0 +1,23 @@
+{
+  "name": "d5v-theme",
+  "version": "0.1.0",
+  "description": "Catppuccin Mocha-inspired theme with a rounded content pane for DeepSeek Harness",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/deadmau5v/d5v-theme.git"
+  },
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json"
+  },
+  "files": ["index.js", "client.js"],
+  "dsh": {
+    "client": {
+      "platform": "web",
+      "inject": ["@deepseek-ai/dsh-client-ui-layout", "@deepseek-ai/dsh-client-ui-theme"]
+    }
+  }
+}
