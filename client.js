@@ -113,6 +113,20 @@ window.__ModuleLoader__.load({
             --dsw-elevation-stroke-color: #cdd6f433;
           }
 
+          /* Local overrides for plugins that paint their own controls. */
+          body[data-ds-dark-theme] .dmc-composer-popover {
+            background: var(--d5v-surface-0);
+          }
+
+          body[data-ds-dark-theme] :is(.dmc-composer-search, .dmc-set-input)::placeholder {
+            color: var(--d5v-subtext);
+            opacity: 1;
+          }
+
+          body[data-ds-dark-theme] .dsh-history-tools-dialog footer button[data-primary] {
+            color: var(--dsw-alias-label-on-color);
+          }
+
           body div:has(> [data-rightbar-col] + [data-shell-bottom])
             > div:has(+ [data-rightbar-col]) {
             background: var(--dsw-alias-bg-base);
